@@ -1,0 +1,2906 @@
+<xml>
+
+<item>
+<title>[COLOR orchid]¤[/COLOR] Cumngo [COLOR orchid]¤[/COLOR]</title>
+<link>$doregex[makelist]</link>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+    <title>[COLOR orange][makelist.param4][/COLOR] [COLOR dodgerblue][makelist.param3][/COLOR]</title>
+        <link>$doregex[makelist2]</link>
+        <thumbnail>https://cumngo.co[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import cache,site,workers
+    import re,urllib,xbmc,xbmcgui
+
+    class page:
+        def run(self, r):
+            threads = [] ; self.r = [] ; r = [(r.index(i)+1, i) for i in r]
+            for i in r: threads.append(workers.Thread(self.request, i))
+            [i.start() for i in threads] ; [i.join() for i in threads]
+            return ''.join([str(i[1]) for i in sorted(self.r, key=lambda x: x[0])])
+        def request(self, i):
+            self.r += [(i[0], site.request(i[1]))]
+
+    url = 'https://cumngo.co/videos?f=new-videos&page='
+    u = []
+    for i in range(1, 20): u += [url + str(i)]
+    u = cache.get(page().run, 24, u)
+    u = u.split('This week',1)[-1]
+    r = re.findall('(?s)<a href="([^"]*).*?rc="([^"]*).*?="([^"]*)(?:[^"]*)"(?:[^"]*)"(?:[^"]*)"(?:[^"]*)"(?:[^"]*)"(?:[^"]*)"(?:[^"]*)"(?:[^"]*)"(?:[^"]*)"(?:[^"]*)"(?:[^"]*)"(?:[^"]*)"(?:[^"]*)"(?:[^"]*)"(?:[^"]*)"(?:[^"]*)"(?:[^"]*)">([^<]*)',u)
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+  <name>makelist2</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import site,jsunpack
+    import re
+    url = ('[makelist.param1]')
+    a = site.request(url)
+    r = re.findall('(?s)<iframe.*?src="([^"]*)',a)[0]
+    s = site.request(r, headers={'user-agent':'iPad','referer':url})
+    t = re.findall('eval\(function(.+?m3u8.+)',s)[0]
+    unpack = jsunpack.unpack(t)
+    l = re.findall('(?:source|src|file):\s*[\'"]([^\'"]+)',unpack)[0]
+    return l
+]]></expres>
+<page>[makelist.param1]</page>
+</regex>
+</item>
+
+
+<item>
+<name>Eporner.com - 4K UHD</name>
+<link>$doregex[makelist]</link>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param3]-[B][COLOR blue][makelist.param1][/COLOR][/B]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param4]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    html = ''
+    html += client.request('https://www.eporner.com/category/4k-porn/')
+    html = re.sub('&#[0-9]+;', '\'', html)
+    html = html.replace('&quot'+';', '"')
+    html = html.replace('&amp;', '&')
+    html = html.replace('&amp;#039;', '&')
+    express = 'mvhdico"><span>(.+?)<\/span>.+?<a\shref="(.+?)"\stitle="(.+?)".+?src="(.+?)"'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<listrepeat><![CDATA[
+        <title>[playurl.param2]</title>
+        <link>https://www.eporner.com[playurl.param1]</link>
+        <thumbnail>[makelist.param4]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = 'https://www.eporner.com' + '[makelist.param2]'
+    html = client.request(url)
+    html = re.sub('Download', 'Play', html)
+    express = '<a href="(\/dload.+?)">(.+?)<\/a>'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Eporner.com - Latest</name>
+<link>$doregex[makelist]</link>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param3]-[B][COLOR blue][makelist.param1][/COLOR][/B]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param4]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    html = ''
+    html += client.request('https://www.eporner.com/0/')
+    html += client.request('https://www.eporner.com/1/')
+    html = re.sub('&#[0-9]+;', '\'', html)
+    html = html.replace('&quot'+';', '"')
+    html = html.replace('&amp;', '&')
+    html = html.replace('&amp;#039;', '&')
+    express = 'mvhdico"><span>(.+?)<\/span>.+?<a\shref="(.+?)"\stitle="(.+?)".+?src="(.+?)"'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<listrepeat><![CDATA[
+        <title>[playurl.param2]</title>
+        <link>https://www.eporner.com[playurl.param1]</link>
+        <thumbnail>[makelist.param4]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = 'https://www.eporner.com' + '[makelist.param2]'
+    html = client.request(url)
+    html = re.sub('Download', 'Play', html)
+    express = '<a href="(\/dload.+?)">(.+?)<\/a>'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+</item>
+  
+
+<item>
+<name>Eporner.com - Category</name>
+<link>$doregex[makelist]</link>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param3]-[B][COLOR blue][makelist.param1][/COLOR][/B]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param4]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    html = ''
+    html += client.request('https://www.eporner.com/cats/')
+    html = re.sub('&#[0-9]+;', '\'', html)
+    html = html.replace('&quot'+';', '"')
+    html = html.replace('&amp;', '&')
+    html = html.replace('&amp;#039;', '&')
+    express = 'mvhdico"><span>(.+?)<\/span>.+?<a\shref="(.+?)"\stitle="(.+?)".+?src="(.+?)"'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<listrepeat><![CDATA[
+        <title>[playurl.param2]</title>
+        <link>https://www.eporner.com[playurl.param1]</link>
+        <thumbnail>[makelist.param4]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = 'https://www.eporner.com' + '[makelist.param2]'
+    html = client.request(url)
+    html = re.sub('Download', 'Play', html)
+    express = '<a href="(\/dload.+?)">(.+?)<\/a>'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Eporner.com - Vintage</name>
+<link>$doregex[makelist]</link>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param3]-[B][COLOR blue][makelist.param1][/COLOR][/B]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param4]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    html = ''
+    html += client.request('https://www.eporner.com/cat/vintage/SORT-longest/')
+    html = re.sub('&#[0-9]+;', '\'', html)
+    html = html.replace('&quot'+';', '"')
+    html = html.replace('&amp;', '&')
+    html = html.replace('&amp;#039;', '&')
+    express = 'mvhdico"><span>(.+?)<\/span>.+?<a\shref="(.+?)"\stitle="(.+?)".+?src="(.+?)"'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<listrepeat><![CDATA[
+        <title>[playurl.param2]</title>
+        <link>https://www.eporner.com[playurl.param1]</link>
+        <thumbnail>[makelist.param4]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = 'https://www.eporner.com' + '[makelist.param2]'
+    html = client.request(url)
+    html = re.sub('Download', 'Play', html)
+    express = '<a href="(\/dload.+?)">(.+?)<\/a>'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Eporner.com - 60FPS</name>
+<link>$doregex[makelist]</link>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param3]-[B][COLOR blue][makelist.param1][/COLOR][/B]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param4]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    html = ''
+    html += client.request('https://www.eporner.com/cat/60fps/SORT-longest/')
+    html = re.sub('&#[0-9]+;', '\'', html)
+    html = html.replace('&quot'+';', '"')
+    html = html.replace('&amp;', '&')
+    html = html.replace('&amp;#039;', '&')
+    express = 'mvhdico"><span>(.+?)<\/span>.+?<a\shref="(.+?)"\stitle="(.+?)".+?src="(.+?)"'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<listrepeat><![CDATA[
+        <title>[playurl.param2]</title>
+        <link>https://www.eporner.com[playurl.param1]</link>
+        <thumbnail>[makelist.param4]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = 'https://www.eporner.com' + '[makelist.param2]'
+    html = client.request(url)
+    html = re.sub('Download', 'Play', html)
+    express = '<a href="(\/dload.+?)">(.+?)<\/a>'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Eporner.com - Milf</name>
+<link>$doregex[makelist]</link>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param3]-[B][COLOR blue][makelist.param1][/COLOR][/B]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param4]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    html = ''
+    html += client.request('https://www.eporner.com/cat/lesbians/SORT-longest/')
+    html = re.sub('&#[0-9]+;', '\'', html)
+    html = html.replace('&quot'+';', '"')
+    html = html.replace('&amp;', '&')
+    html = html.replace('&amp;#039;', '&')
+    express = 'mvhdico"><span>(.+?)<\/span>.+?<a\shref="(.+?)"\stitle="(.+?)".+?src="(.+?)"'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<listrepeat><![CDATA[
+        <title>[playurl.param2]</title>
+        <link>https://www.eporner.com[playurl.param1]</link>
+        <thumbnail>[makelist.param4]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = 'https://www.eporner.com' + '[makelist.param2]'
+    html = client.request(url)
+    html = re.sub('Download', 'Play', html)
+    express = '<a href="(\/dload.+?)">(.+?)<\/a>'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+  
+<item>
+<name>Amatsonly.com - Latest</name>
+<link>$doregex[makelist]</link>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param3]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    html = ''
+    html += client.request('http://www.amatsonly.com/')
+    html += client.request('http://www.amatsonly.com/?page=2')
+    html += client.request('http://www.amatsonly.com/?page=3')
+    html += client.request('http://www.amatsonly.com/?page=4')
+    html += client.request('http://www.amatsonly.com/?page=5')
+    html += client.request('http://www.amatsonly.com/?page=6')
+    html += client.request('http://www.amatsonly.com/?page=7')
+    html += client.request('http://www.amatsonly.com/?page=8')
+    html = re.sub('&#[0-9]+;', '\'', html)
+    html = html.replace('&quot'+';', '"')
+    html = html.replace('&amp;', '&')
+    html = html.replace('&amp;#039;', '&')
+    express = '<div class="col-sm-6 col-md-6">\n.+?\n.+?\n.+?<h4><a\shref="(.+?)"\stitle="(.+?)".+?\n.+?\n.+?\n.+?src="(.+?)"'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = '[makelist.param1]'
+    html = client.request(url)
+    express = '<source src="(.+?)" type=\'video\/mp4\' \/>'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)[0]
+    return links
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Eporner.com - HomeMade/name>
+<link>$doregex[makelist]</link>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param3]-[B][COLOR blue][makelist.param1][/COLOR][/B]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param4]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    html = ''
+    html += client.request('https://www.eporner.com/cat/homemade/SORT-longest/')
+    html = re.sub('&#[0-9]+;', '\'', html)
+    html = html.replace('&quot'+';', '"')
+    html = html.replace('&amp;', '&')
+    html = html.replace('&amp;#039;', '&')
+    express = 'mvhdico"><span>(.+?)<\/span>.+?<a\shref="(.+?)"\stitle="(.+?)".+?src="(.+?)"'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<listrepeat><![CDATA[
+        <title>[playurl.param2]</title>
+        <link>https://www.eporner.com[playurl.param1]</link>
+        <thumbnail>[makelist.param4]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = 'https://www.eporner.com' + '[makelist.param2]'
+    html = client.request(url)
+    html = re.sub('Download', 'Play', html)
+    express = '<a href="(\/dload.+?)">(.+?)<\/a>'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Yuvutu.com - Latest</name>
+<link>$doregex[makelist]</link>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param3]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    html = ''
+    html += client.request('http://www.yuvutu.com/index.php?name=Video&op=videos&list=most_recent')
+    html += client.request('http://www.yuvutu.com/modules.php?name=Video&op=videos&list=most_recent&period=last_week&filter=0&channel=1&style=1&page=2&category=0&country_code=&min_length=1400')
+    html += client.request('http://www.yuvutu.com/modules.php?name=Video&op=videos&list=most_recent&period=last_week&filter=0&channel=1&style=1&page=3&category=0&country_code=&min_length=1400')
+    html = re.sub('&#[0-9]+;', '\'', html)
+    html = html.replace('&quot'+';', '"')
+    html = html.replace('&amp;', '&')
+    html = html.replace('&amp;#039;', '&')
+    express = '<a\shref="\/(video.+?)".+?src="(.+?)".+?title="(.+?)"\s\/><\/a>'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    main = 'http://www.yuvutu.com/' + '[makelist.param1]'
+    html = client.request(main)
+    html = html.replace('\\', '')
+    express = '<iframe\ssrc="(\/embed.+?)"'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)[0]
+    embed = 'http://www.yuvutu.com' + links
+    html = client.request(embed)
+    express2 = 'file: "(.+?)"'
+    play = re.compile(express2, re.MULTILINE|re.DOTALL).findall(html)[0]
+    return play
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>MomXXX.org - Latest</name>
+<link>$doregex[makelist]</link>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+<title>[makelist.param2]</title>
+<link>$doregex[playurl]</link>
+<thumbnail>[makelist.param3]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    html = ''
+    html += client.request('http://momxxx.org/')
+    html += client.request('http://momxxx.org/page/2/')
+    html += client.request('http://momxxx.org/page/3/')
+    html = re.sub('&#[0-9]+;', '\'', html)
+    html = html.replace('&quot'+';', '"')
+    html = html.replace('&amp;', '&') 
+    express = 'href="(.+?)".+?title="(.+?)">.+?data-src="(.+?)"'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[<source src="(.+?)"]]></expres>
+<page>[makelist.param1]</page>
+</regex>
+</item>
+
+
+<item>
+<title>Youramateurporn.com - Featured</title>
+<link>$doregex[makelist]</link>
+<regex>
+  <name>makelist</name>
+  <listrepeat><![CDATA[
+        <title>[makelist.param3][/COLOR]:[COLOR yellow][makelist.param4][/COLOR]</title>
+        <link>$doregex[getsrcpink]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[<a href="(.+?)".*\n.*\n.+img src="(.+?)" alt="(.+?)".*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.+views">(.+?)<]]></expres>
+<page>http://www.youramateurporn.com/most-recent/</page>
+<cookieJar></cookieJar>
+</regex>
+<regex>
+<name>getsrcpink</name>
+<expres><![CDATA[<source src="(.+?)" type='video/mp4'>]]></expres>
+<page>[makelist.param1]</page>
+</regex>
+</item>
+
+
+<item>
+<title>Youramateurporn.com - Length/title>
+<link>$doregex[makelist]</link>
+<regex>
+  <name>makelist</name>
+  <listrepeat><![CDATA[
+        <title>[makelist.param3][/COLOR]:[COLOR yellow][makelist.param4][/COLOR]</title>
+        <link>$doregex[getsrcpink]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[<a href="(.+?)".*\n.*\n.+img src="(.+?)" alt="(.+?)".*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.+views">(.+?)<]]></expres>
+<page>https://www.youramateurporn.com/longest/</page>
+<cookieJar></cookieJar>
+</regex>
+<regex>
+<name>getsrcpink</name>
+<expres><![CDATA[<source src="(.+?)" type='video/mp4'>]]></expres>
+<page>[makelist.param1]</page>
+</regex>
+</item>
+
+
+<item>
+<title>collectionofbestporn.com - Most Viewed</title>
+<link>$doregex[makelist]</link>
+<regex>
+  <name>makelist</name>
+  <listrepeat><![CDATA[
+        <title>[COLOR yellow][makelist.param3][/COLOR]</title>
+        <link>$doregex[pink]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[<a href="(.+?)".*\n.*\n.*\n.*\n.+?img src="(.+?)" title="(.+?)"]]></expres>
+<page>http://collectionofbestporn.com/most-viewed</page>
+<cookieJar></cookieJar>
+</regex>
+<regex>
+<name>pink</name>
+<expres><![CDATA[<source src="(.+?)" type='video/mp4']]></expres>
+<page>[makelist.param1]</page>
+<cookieJar></cookieJar>
+</regex>
+</item>
+
+
+<item>
+<title>collectionofbestporn.com - Czech</title>
+<link>$doregex[makelist]</link>
+<regex>
+  <name>makelist</name>
+  <listrepeat><![CDATA[
+        <title>[COLOR yellow][makelist.param3][/COLOR]</title>
+        <link>$doregex[pink]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[<a href="(.+?)".*\n.*\n.*\n.*\n.+?img src="(.+?)" title="(.+?)"]]></expres>
+<page>https://collectionofbestporn.com/category/czech/longest/</page>
+<cookieJar></cookieJar>
+</regex>
+<regex>
+<name>pink</name>
+<expres><![CDATA[<source src="(.+?)" type='video/mp4']]></expres>
+<page>[makelist.param1]</page>
+<cookieJar></cookieJar>
+</regex>
+</item>
+
+
+<item>
+<title>collectionofbestporn.com - Family</title>
+<link>$doregex[makelist]</link>
+<regex>
+  <name>makelist</name>
+  <listrepeat><![CDATA[
+        <title>[COLOR yellow][makelist.param3][/COLOR]</title>
+        <link>$doregex[pink]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[<a href="(.+?)".*\n.*\n.*\n.*\n.+?img src="(.+?)" title="(.+?)"]]></expres>
+<page>https://collectionofbestporn.com/category/family/longest/</page>
+<cookieJar></cookieJar>
+</regex>
+<regex>
+<name>pink</name>
+<expres><![CDATA[<source src="(.+?)" type='video/mp4']]></expres>
+<page>[makelist.param1]</page>
+<cookieJar></cookieJar>
+</regex>
+</item>
+
+
+<item>
+<title>collectionofbestporn.com - Massage</title>
+<link>$doregex[makelist]</link>
+<regex>
+  <name>makelist</name>
+  <listrepeat><![CDATA[
+        <title>[COLOR yellow][makelist.param3][/COLOR]</title>
+        <link>$doregex[pink]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[<a href="(.+?)".*\n.*\n.*\n.*\n.+?img src="(.+?)" title="(.+?)"]]></expres>
+<page>https://collectionofbestporn.com/category/massage/longest/</page>
+<cookieJar></cookieJar>
+</regex>
+<regex>
+<name>pink</name>
+<expres><![CDATA[<source src="(.+?)" type='video/mp4']]></expres>
+<page>[makelist.param1]</page>
+<cookieJar></cookieJar>
+</regex>
+</item>
+
+
+<item>
+<title>collectionofbestporn.com - Old and Young</title>
+<link>$doregex[makelist]</link>
+<regex>
+  <name>makelist</name>
+  <listrepeat><![CDATA[
+        <title>[COLOR yellow][makelist.param3][/COLOR]</title>
+        <link>$doregex[pink]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[<a href="(.+?)".*\n.*\n.*\n.*\n.+?img src="(.+?)" title="(.+?)"]]></expres>
+<page>https://collectionofbestporn.com/category/old-and-young/longest/</page>
+<cookieJar></cookieJar>
+</regex>
+<regex>
+<name>pink</name>
+<expres><![CDATA[<source src="(.+?)" type='video/mp4']]></expres>
+<page>[makelist.param1]</page>
+<cookieJar></cookieJar>
+</regex>
+</item>
+
+
+<item>
+<title>collectionofbestporn.com -Pov</title>
+<link>$doregex[makelist]</link>
+<regex>
+  <name>makelist</name>
+  <listrepeat><![CDATA[
+        <title>[COLOR yellow][makelist.param3][/COLOR]</title>
+        <link>$doregex[pink]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[<a href="(.+?)".*\n.*\n.*\n.*\n.+?img src="(.+?)" title="(.+?)"]]></expres>
+<page>https://collectionofbestporn.com/category/old-and-young/longest/</page>
+<cookieJar></cookieJar>
+</regex>
+<regex>
+<name>pink</name>
+<expres><![CDATA[<source src="(.+?)" type='video/mp4']]></expres>
+<page>[makelist.param1]</page>
+<cookieJar></cookieJar>
+</regex>
+</item>
+
+
+<item>
+<title>collectionofbestporn.com - Milf</title>
+<link>$doregex[makelist]</link>
+<regex>
+  <name>makelist</name>
+  <listrepeat><![CDATA[
+        <title>[COLOR yellow][makelist.param3][/COLOR]</title>
+        <link>$doregex[pink]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[<a href="(.+?)".*\n.*\n.*\n.*\n.+?img src="(.+?)" title="(.+?)"]]></expres>
+<page>https://collectionofbestporn.com/category/milf/longest/</page>
+<cookieJar></cookieJar>
+</regex>
+<regex>
+<name>pink</name>
+<expres><![CDATA[<source src="(.+?)" type='video/mp4']]></expres>
+<page>[makelist.param1]</page>
+<cookieJar></cookieJar>
+</regex>
+</item> 
+
+
+<item>
+<title>collectionofbestporn.com - Lesbi</title>
+<link>$doregex[makelist]</link>
+<regex>
+  <name>makelist</name>
+  <listrepeat><![CDATA[
+        <title>[COLOR yellow][makelist.param3][/COLOR]</title>
+        <link>$doregex[pink]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[<a href="(.+?)".*\n.*\n.*\n.*\n.+?img src="(.+?)" title="(.+?)"]]></expres>
+<page>https://collectionofbestporn.com/category/lesbian/longest/</page>
+<cookieJar></cookieJar>
+</regex>
+<regex>
+<name>pink</name>
+<expres><![CDATA[<source src="(.+?)" type='video/mp4']]></expres>
+<page>[makelist.param1]</page>
+<cookieJar></cookieJar>
+</regex>
+</item> 
+
+
+<item>
+<title>collectionofbestporn.com - German</title>
+<link>$doregex[makelist]</link>
+<regex>
+  <name>makelist</name>
+  <listrepeat><![CDATA[
+        <title>[COLOR yellow][makelist.param3][/COLOR]</title>
+        <link>$doregex[pink]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[<a href="(.+?)".*\n.*\n.*\n.*\n.+?img src="(.+?)" title="(.+?)"]]></expres>
+<page>http://collectionofbestporn.com/most-viewed</page>
+<cookieJar></cookieJar>
+</regex>
+<regex>
+<name>pink</name>
+<expres><![CDATA[<source src="(.+?)" type='video/mp4']]></expres>
+<page>[makelist.param1]</page>
+<cookieJar></cookieJar>
+</regex>
+</item>  
+
+ 
+<item>
+<title>WATCHmynewGF - Latest</title>
+<link>$doregex[makelist]</link>
+<regex>
+  <name>makelist</name>
+  <listrepeat><![CDATA[
+        <title>[makelist.param4][/COLOR][COLOR yellow][makelist.param3][/COLOR]</title>
+        <link>$doregex[getsrcpink]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[<a href="(.+?)".*\n.+img src="(.+?)".*\n.+<b>(.+?)<\/b.*\n.+p>(.+?)<]]></expres>
+<page>http://watchmynewgf.com/all-categories</page>
+<cookieJar></cookieJar>
+</regex>
+<regex>
+<name>getsrcpink</name>
+<expres><![CDATA[video_url: '(.+?)']]></expres>
+<page>http://watchmynewgf.com[makelist.param1]</page>
+</regex>
+</item>
+
+
+<item>
+<name>Motherless.com - Latest</name>
+<link>$doregex[makelist]</link>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param3]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    html = ''
+    html += client.request('http://motherless.com/videos/recent')
+    html += client.request('http://motherless.com/videos/recent?page=2')    
+    html = re.sub('&#[0-9]+;', '\'', html)
+    html = html.replace('&quot'+';', '"')
+    html = html.replace('&amp;', '&')
+    html = html.replace('&amp;#039;', '&')
+    html = html.split('<h1>\n.+?Most\sRecent\sVideos', 1)[-1]
+    html = html.split('<div class=\'pagination_link\'>', 1)[0]
+    express = '<div class="thumb-container.+?\n.+?<a\shref="(.+?)".+?\n.+?src="(.+?)".+?alt="(.+?)"'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    main = '[makelist.param1]'
+    html = client.request(main)
+    express = 'fileurl = \'(.+?)\''
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)[0]
+    return links
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Motherless.com - Cfnm Teen</name>
+<link>$doregex[makelist]</link>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param3]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    html = ''
+    html += client.request('http://motherless.com/term/videos/cfnm+teen?term=cfnm+teen&type=all&range=0&size=3&sort=relevance')
+    html += client.request('http://motherless.com/term/videos/cfnm%20teen?range=0&size=3&sort=relevance&page=2')    
+    html = re.sub('&#[0-9]+;', '\'', html)
+    html = html.replace('&quot'+';', '"')
+    html = html.replace('&amp;', '&')
+    html = html.replace('&amp;#039;', '&')
+    html = html.split('<h1>\n.+?Most\sRecent\sVideos', 1)[-1]
+    html = html.split('<div class=\'pagination_link\'>', 1)[0]
+    express = '<div class="thumb-container.+?\n.+?<a\shref="(.+?)".+?\n.+?src="(.+?)".+?alt="(.+?)"'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    main = '[makelist.param1]'
+    html = client.request(main)
+    express = 'fileurl = \'(.+?)\''
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)[0]
+    return links
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Motherless.com - Japanese</name>
+<link>$doregex[makelist]</link>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param3]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    html = ''
+    html += client.request('http://motherless.com/term/videos/japanese+cfnm?term=japanese+cfnm&type=all&range=0&size=3&sort=relevance')
+    html += client.request('http://motherless.com/term/videos/japanese+cfnm?term=japanese+cfnm&type=all&range=0&size=3&sort=relevance?page=2')    
+    html = re.sub('&#[0-9]+;', '\'', html)
+    html = html.replace('&quot'+';', '"')
+    html = html.replace('&amp;', '&')
+    html = html.replace('&amp;#039;', '&')
+    html = html.split('<h1>\n.+?Most\sRecent\sVideos', 1)[-1]
+    html = html.split('<div class=\'pagination_link\'>', 1)[0]
+    express = '<div class="thumb-container.+?\n.+?<a\shref="(.+?)".+?\n.+?src="(.+?)".+?alt="(.+?)"'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    main = '[makelist.param1]'
+    html = client.request(main)
+    express = 'fileurl = \'(.+?)\''
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)[0]
+    return links
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Motherless.com - Hairy</name>
+<link>$doregex[makelist]</link>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param3]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    html = ''
+    html += client.request('http://motherless.com/term/videos/hairy%20pussy?range=0&size=3&sort=relevance')
+    html += client.request('http://motherless.com/term/videos/hairy%20pussy?range=0&size=3&sort=relevance?page=2')    
+    html = re.sub('&#[0-9]+;', '\'', html)
+    html = html.replace('&quot'+';', '"')
+    html = html.replace('&amp;', '&')
+    html = html.replace('&amp;#039;', '&')
+    html = html.split('<h1>\n.+?Most\sRecent\sVideos', 1)[-1]
+    html = html.split('<div class=\'pagination_link\'>', 1)[0]
+    express = '<div class="thumb-container.+?\n.+?<a\shref="(.+?)".+?\n.+?src="(.+?)".+?alt="(.+?)"'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    main = '[makelist.param1]'
+    html = client.request(main)
+    express = 'fileurl = \'(.+?)\''
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)[0]
+    return links
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Motherless.com - Vintage</name>
+<link>$doregex[makelist]</link>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param3]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    html = ''
+    html += client.request('http://motherless.com/search?term=vintage+movie&type=all&range=0&sort=relevance&size=3')
+    html += client.request('http://motherless.com/search?term=vintage+movie&type=all&range=0&sort=relevance&size=3?page=2')    
+    html = re.sub('&#[0-9]+;', '\'', html)
+    html = html.replace('&quot'+';', '"')
+    html = html.replace('&amp;', '&')
+    html = html.replace('&amp;#039;', '&')
+    html = html.split('<h1>\n.+?Most\sRecent\sVideos', 1)[-1]
+    html = html.split('<div class=\'pagination_link\'>', 1)[0]
+    express = '<div class="thumb-container.+?\n.+?<a\shref="(.+?)".+?\n.+?src="(.+?)".+?alt="(.+?)"'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    main = '[makelist.param1]'
+    html = client.request(main)
+    express = 'fileurl = \'(.+?)\''
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)[0]
+    return links
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Motherless.com - Nylon</name>
+<link>$doregex[makelist]</link>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param3]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    html = ''
+    html += client.request('http://motherless.com/term/videos/nylon?term=nylon&type=all&range=0&size=3&sort=relevance')
+    html += client.request('http://motherless.com/term/videos/nylon?term=nylon&type=all&range=0&size=3&sort=relevance?page=2')    
+    html = re.sub('&#[0-9]+;', '\'', html)
+    html = html.replace('&quot'+';', '"')
+    html = html.replace('&amp;', '&')
+    html = html.replace('&amp;#039;', '&')
+    html = html.split('<h1>\n.+?Most\sRecent\sVideos', 1)[-1]
+    html = html.split('<div class=\'pagination_link\'>', 1)[0]
+    express = '<div class="thumb-container.+?\n.+?<a\shref="(.+?)".+?\n.+?src="(.+?)".+?alt="(.+?)"'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    main = '[makelist.param1]'
+    html = client.request(main)
+    express = 'fileurl = \'(.+?)\''
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)[0]
+    return links
+]]></expres>
+<page></page>
+</regex>
+</item> 
+
+
+<item>
+<name>Motherless.com - Milfs</name>
+<link>$doregex[makelist]</link>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param3]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    html = ''
+    html += client.request('http://motherless.com/term/videos/lesbian+milf?term=lesbian+milf&type=all&range=0&size=3&sort=relevance')
+    html += client.request('http://motherless.com/term/videos/lesbian+milf?term=lesbian+milf&type=all&range=0&size=3&sort=relevance?page=2')    
+    html = re.sub('&#[0-9]+;', '\'', html)
+    html = html.replace('&quot'+';', '"')
+    html = html.replace('&amp;', '&')
+    html = html.replace('&amp;#039;', '&')
+    html = html.split('<h1>\n.+?Most\sRecent\sVideos', 1)[-1]
+    html = html.split('<div class=\'pagination_link\'>', 1)[0]
+    express = '<div class="thumb-container.+?\n.+?<a\shref="(.+?)".+?\n.+?src="(.+?)".+?alt="(.+?)"'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    main = '[makelist.param1]'
+    html = client.request(main)
+    express = 'fileurl = \'(.+?)\''
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)[0]
+    return links
+]]></expres>
+<page></page>
+</regex>
+</item>   
+
+
+<item>
+<name>Motherless.com - Pussy</name>
+<link>$doregex[makelist]</link>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param3]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    html = ''
+    html += client.request('http://motherless.com/term/videos/lesbian+pussy+eating?term=lesbian+pussy+eating&type=all&range=0&size=3&sort=relevance')
+    html += client.request('http://motherless.com/term/videos/lesbian+pussy+eating?term=lesbian+pussy+eating&type=all&range=0&size=3&sort=relevance?page=2')    
+    html = re.sub('&#[0-9]+;', '\'', html)
+    html = html.replace('&quot'+';', '"')
+    html = html.replace('&amp;', '&')
+    html = html.replace('&amp;#039;', '&')
+    html = html.split('<h1>\n.+?Most\sRecent\sVideos', 1)[-1]
+    html = html.split('<div class=\'pagination_link\'>', 1)[0]
+    express = '<div class="thumb-container.+?\n.+?<a\shref="(.+?)".+?\n.+?src="(.+?)".+?alt="(.+?)"'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    main = '[makelist.param1]'
+    html = client.request(main)
+    express = 'fileurl = \'(.+?)\''
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)[0]
+    return links
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Motherless.com - Jav</name>
+<link>$doregex[makelist]</link>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param3]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    html = ''
+    html += client.request('http://motherless.com/term/videos/japanese+lesbian?term=japanese+lesbian&type=all&range=0&size=3&sort=relevance')
+    html += client.request('http://motherless.com/term/videos/japanese+lesbian?term=japanese+lesbian&type=all&range=0&size=3&sort=relevance?page=2')    
+    html = re.sub('&#[0-9]+;', '\'', html)
+    html = html.replace('&quot'+';', '"')
+    html = html.replace('&amp;', '&')
+    html = html.replace('&amp;#039;', '&')
+    html = html.split('<h1>\n.+?Most\sRecent\sVideos', 1)[-1]
+    html = html.split('<div class=\'pagination_link\'>', 1)[0]
+    express = '<div class="thumb-container.+?\n.+?<a\shref="(.+?)".+?\n.+?src="(.+?)".+?alt="(.+?)"'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    main = '[makelist.param1]'
+    html = client.request(main)
+    express = 'fileurl = \'(.+?)\''
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)[0]
+    return links
+]]></expres>
+<page></page>
+</regex>
+</item>    
+
+
+<item>
+<name>Motherless.com - Massege</name>
+<link>$doregex[makelist]</link>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param3]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    html = ''
+    html += client.request('http://motherless.com/term/videos/lesbian+massage?term=lesbian+massage&type=all&range=0&size=3&sort=relevance')
+    html += client.request('http://motherless.com/term/videos/lesbian+massage?term=lesbian+massage&type=all&range=0&size=3&sort=relevance?page=2')    
+    html = re.sub('&#[0-9]+;', '\'', html)
+    html = html.replace('&quot'+';', '"')
+    html = html.replace('&amp;', '&')
+    html = html.replace('&amp;#039;', '&')
+    html = html.split('<h1>\n.+?Most\sRecent\sVideos', 1)[-1]
+    html = html.split('<div class=\'pagination_link\'>', 1)[0]
+    express = '<div class="thumb-container.+?\n.+?<a\shref="(.+?)".+?\n.+?src="(.+?)".+?alt="(.+?)"'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    main = '[makelist.param1]'
+    html = client.request(main)
+    express = 'fileurl = \'(.+?)\''
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)[0]
+    return links
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Motherless.com - Momm</name>
+<link>$doregex[makelist]</link>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param3]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    html = ''
+    html += client.request('http://motherless.com/term/videos/lesbian+mom?term=lesbian+mom&range=0&size=3&sort=relevance')
+    html += client.request('http://motherless.com/term/videos/lesbian+mom?term=lesbian+mom&range=0&size=3&sort=relevance?page=2')    
+    html = re.sub('&#[0-9]+;', '\'', html)
+    html = html.replace('&quot'+';', '"')
+    html = html.replace('&amp;', '&')
+    html = html.replace('&amp;#039;', '&')
+    html = html.split('<h1>\n.+?Most\sRecent\sVideos', 1)[-1]
+    html = html.split('<div class=\'pagination_link\'>', 1)[0]
+    express = '<div class="thumb-container.+?\n.+?<a\shref="(.+?)".+?\n.+?src="(.+?)".+?alt="(.+?)"'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    main = '[makelist.param1]'
+    html = client.request(main)
+    express = 'fileurl = \'(.+?)\''
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)[0]
+    return links
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+<item>
+<name>Motherless.com - Legging</name>
+<link>$doregex[makelist]</link>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param3]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    html = ''
+    html += client.request('http://motherless.com/term/videos/leggings?term=leggings&type=all&range=0&size=3&sort=relevance')
+    html += client.request('http://motherless.com/term/videos/leggings?term=leggings&type=all&range=0&size=3&sort=relevance?page=2')    
+    html = re.sub('&#[0-9]+;', '\'', html)
+    html = html.replace('&quot'+';', '"')
+    html = html.replace('&amp;', '&')
+    html = html.replace('&amp;#039;', '&')
+    html = html.split('<h1>\n.+?Most\sRecent\sVideos', 1)[-1]
+    html = html.split('<div class=\'pagination_link\'>', 1)[0]
+    express = '<div class="thumb-container.+?\n.+?<a\shref="(.+?)".+?\n.+?src="(.+?)".+?alt="(.+?)"'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    main = '[makelist.param1]'
+    html = client.request(main)
+    express = 'fileurl = \'(.+?)\''
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)[0]
+    return links
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<title>PornRabbit.com - Latest</title>
+<link>$doregex[makelist]</link>
+<regex>
+  <name>makelist</name>
+  <listrepeat><![CDATA[
+        <title>[makelist.param2][/COLOR]</title>
+        <link>$doregex[getsrcpink]</link>
+        <thumbnail>[makelist.param3]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[<a href="(.+?)" title="(.+?)".*\n.*\n.*\n.*\n.+src="(.+?)"]]></expres>
+<page>http://www.pornrabbit.com/videos/</page>
+<cookieJar></cookieJar>
+</regex>
+<regex>
+<name>getsrcpink</name>
+<expres><![CDATA[file: '(.+mp4.+?)']]></expres>
+<page>http://www.pornrabbit.com[makelist.param1]</page>
+</regex>
+</item>
+
+
+<item>
+<title>PornRabbit.com - Nylon</title>
+<link>$doregex[makelist]</link>
+<regex>
+  <name>makelist</name>
+  <listrepeat><![CDATA[
+        <title>[makelist.param2][/COLOR]</title>
+        <link>$doregex[getsrcpink]</link>
+        <thumbnail>[makelist.param3]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[<a href="(.+?)" title="(.+?)".*\n.*\n.*\n.*\n.+src="(.+?)"]]></expres>
+<page>http://www.pornrabbit.com/tags/nylon-legs/</page>
+<cookieJar></cookieJar>
+</regex>
+<regex>
+<name>getsrcpink</name>
+<expres><![CDATA[file: '(.+mp4.+?)']]></expres>
+<page>http://www.pornrabbit.com[makelist.param1]</page>
+</regex>
+</item>
+
+
+<item>
+<title>PornRabbit.com - Nyln</title>
+<link>$doregex[makelist]</link>
+<regex>
+  <name>makelist</name>
+  <listrepeat><![CDATA[
+        <title>[makelist.param2][/COLOR]</title>
+        <link>$doregex[getsrcpink]</link>
+        <thumbnail>[makelist.param3]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[<a href="(.+?)" title="(.+?)".*\n.*\n.*\n.*\n.+src="(.+?)"]]></expres>
+<page>http://www.pornrabbit.com/tags/nylons/</page>
+<cookieJar></cookieJar>
+</regex>
+<regex>
+<name>getsrcpink</name>
+<expres><![CDATA[file: '(.+mp4.+?)']]></expres>
+<page>http://www.pornrabbit.com[makelist.param1]</page>
+</regex>
+</item>
+
+ 
+<item>
+<title>PornRabbit.com - NLN</title>
+<link>$doregex[makelist]</link>
+<regex>
+  <name>makelist</name>
+  <listrepeat><![CDATA[
+        <title>[makelist.param2][/COLOR]</title>
+        <link>$doregex[getsrcpink]</link>
+        <thumbnail>[makelist.param3]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[<a href="(.+?)" title="(.+?)".*\n.*\n.*\n.*\n.+src="(.+?)"]]></expres>
+<page>http://www.pornrabbit.com/tags/nylon/</page>
+<cookieJar></cookieJar>
+</regex>
+<regex>
+<name>getsrcpink</name>
+<expres><![CDATA[file: '(.+mp4.+?)']]></expres>
+<page>http://www.pornrabbit.com[makelist.param1]</page>
+</regex>
+</item>
+  
+<item>
+<title>PornRabbit.com - CFNM</title>
+<link>$doregex[makelist]</link>
+<regex>
+  <name>makelist</name>
+  <listrepeat><![CDATA[
+        <title>[makelist.param2][/COLOR]</title>
+        <link>$doregex[getsrcpink]</link>
+        <thumbnail>[makelist.param3]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[<a href="(.+?)" title="(.+?)".*\n.*\n.*\n.*\n.+src="(.+?)"]]></expres>
+<page>https://www.pornrabbit.com/tags/cfnm/</page>
+<cookieJar></cookieJar>
+</regex>
+<regex>
+<name>getsrcpink</name>
+<expres><![CDATA[file: '(.+mp4.+?)']]></expres>
+<page>http://www.pornrabbit.com[makelist.param1]</page>
+</regex>
+</item>
+
+<item>
+<title>PornRabbit.com - Shaving</title>
+<link>$doregex[makelist]</link>
+<regex>
+  <name>makelist</name>
+  <listrepeat><![CDATA[
+        <title>[makelist.param2][/COLOR]</title>
+        <link>$doregex[getsrcpink]</link>
+        <thumbnail>[makelist.param3]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[<a href="(.+?)" title="(.+?)".*\n.*\n.*\n.*\n.+src="(.+?)"]]></expres>
+<page>http://www.pornrabbit.com/tags/shaving/</page>
+<cookieJar></cookieJar>
+</regex>
+<regex>
+<name>getsrcpink</name>
+<expres><![CDATA[file: '(.+mp4.+?)']]></expres>
+<page>http://www.pornrabbit.com[makelist.param1]</page>
+</regex>
+</item>
+
+<item>
+<title>PornRabbit.com - Lesbi</title>
+<link>$doregex[makelist]</link>
+<regex>
+  <name>makelist</name>
+  <listrepeat><![CDATA[
+        <title>[makelist.param2][/COLOR]</title>
+        <link>$doregex[getsrcpink]</link>
+        <thumbnail>[makelist.param3]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[<a href="(.+?)" title="(.+?)".*\n.*\n.*\n.*\n.+src="(.+?)"]]></expres>
+<page>http://www.pornrabbit.com/tags/wet-lesbians/</page>
+<cookieJar></cookieJar>
+</regex>
+<regex>
+<name>getsrcpink</name>
+<expres><![CDATA[file: '(.+mp4.+?)']]></expres>
+<page>http://www.pornrabbit.com[makelist.param1]</page>
+</regex>
+</item> 
+
+<item>
+<name>Motherless.com - Teen</name>
+<link>$doregex[makelist]</link>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param3]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    html = ''
+    html += client.request('http://motherless.com/term/videos/teen+lesbian?term=teen+lesbian&type=all&range=0&size=3&sort=relevance')
+    html += client.request('http://motherless.com/term/videos/teen+lesbian?term=teen+lesbian&type=all&range=0&size=3&sort=relevance?page=2')    
+    html = re.sub('&#[0-9]+;', '\'', html)
+    html = html.replace('&quot'+';', '"')
+    html = html.replace('&amp;', '&')
+    html = html.replace('&amp;#039;', '&')
+    html = html.split('<h1>\n.+?Most\sRecent\sVideos', 1)[-1]
+    html = html.split('<div class=\'pagination_link\'>', 1)[0]
+    express = '<div class="thumb-container.+?\n.+?<a\shref="(.+?)".+?\n.+?src="(.+?)".+?alt="(.+?)"'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    main = '[makelist.param1]'
+    html = client.request(main)
+    express = 'fileurl = \'(.+?)\''
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)[0]
+    return links
+]]></expres>
+<page></page>
+</regex>
+</item>  
+
+
+<item>
+<name>Motherless.com - Trio</name>
+<link>$doregex[makelist]</link>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param3]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    html = ''
+    html += client.request('http://motherless.com/term/videos/lesbian+threesome?term=lesbian+threesome&type=all&range=0&size=3&sort=relevance')
+    html += client.request('http://motherless.com/term/videos/lesbian+threesome?term=lesbian+threesome&type=all&range=0&size=3&sort=relevance?page=2')    
+    html = re.sub('&#[0-9]+;', '\'', html)
+    html = html.replace('&quot'+';', '"')
+    html = html.replace('&amp;', '&')
+    html = html.replace('&amp;#039;', '&')
+    html = html.split('<h1>\n.+?Most\sRecent\sVideos', 1)[-1]
+    html = html.split('<div class=\'pagination_link\'>', 1)[0]
+    express = '<div class="thumb-container.+?\n.+?<a\shref="(.+?)".+?\n.+?src="(.+?)".+?alt="(.+?)"'
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)
+    return links
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    main = '[makelist.param1]'
+    html = client.request(main)
+    express = 'fileurl = \'(.+?)\''
+    links = re.compile(express, re.MULTILINE|re.DOTALL).findall(html)[0]
+    return links
+]]></expres>
+<page></page>
+</regex>
+</item>   
+
+
+<item>
+<title>Xvideos - Channel</title>
+<link>$doregex[makelist]</link>
+<regex>
+  <name>makelist</name>
+  <listrepeat><![CDATA[
+        <title>[makelist.param3][/COLOR]</title>
+        <link>$doregex[getsrcpink]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[div id.+<a href="(.+?)".+img src="(.+?)".+title="(.+?)">]]></expres>
+<page>http://www.xvideos.com/channels-index/europe/from/worldwide/</page>
+<cookieJar></cookieJar>
+</regex>
+<regex>
+<name>getsrcpink</name>
+<expres><![CDATA[setVideoUrlHigh\('(.+?)'\)]]></expres>
+<page>http://www.xvideos.com[makelist.param1]</page>
+</regex>
+</item>
+
+
+<item>
+<title>Xvideos - Latest</title>
+<link>$doregex[makelist]</link>
+<regex>
+  <name>makelist</name>
+  <listrepeat><![CDATA[
+        <title>[makelist.param3][/COLOR]</title>
+        <link>$doregex[getsrcpink]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[div id.+<a href="(.+?)".+img src="(.+?)".+title="(.+?)">]]></expres>
+<page>http://www.xvideos.com/</page>
+<cookieJar></cookieJar>
+</regex>
+<regex>
+<name>getsrcpink</name>
+<expres><![CDATA[setVideoUrlHigh\('(.+?)'\)]]></expres>
+<page>http://www.xvideos.com[makelist.param1]</page>
+</regex>
+</item>
+
+
+<item>
+<title>Xvideos - Most Popular</title>
+<link>$doregex[makelist]</link>
+<regex>
+  <name>makelist</name>
+  <listrepeat><![CDATA[
+        <title>[makelist.param3]</title>
+        <link>$doregex[getsrcpink]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[div id.+<a href="(.+?)".+img src="(.+?)".+title="(.+?)">]]></expres>
+<page>http://www.xvideos.com/best/month/</page>
+<cookieJar></cookieJar>
+</regex>
+<regex>
+<name>getsrcpink</name>
+<expres><![CDATA[setVideoUrlHigh\('(.+?)'\)]]></expres>
+<page>http://www.xvideos.com[makelist.param1]</page>
+</regex>
+</item>
+
+
+<item>
+<title>Xvideos - Lesbi</title>
+<link>$doregex[makelist]</link>
+<regex>
+  <name>makelist</name>
+  <listrepeat><![CDATA[
+        <title>[makelist.param3][/COLOR]</title>
+        <link>$doregex[getsrcpink]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[div id.+<a href="(.+?)".+img src="(.+?)".+title="(.+?)">]]></expres>
+<page>http://www.xvideos.com/c/d:20min_more/q:1080P/Lesbian-26</page>
+<cookieJar></cookieJar>
+</regex>
+<regex>
+<name>getsrcpink</name>
+<expres><![CDATA[setVideoUrlHigh\('(.+?)'\)]]></expres>
+<page>http://www.xvideos.com[makelist.param1]</page>
+</regex>
+</item>
+
+
+<item>
+<title>Xvideos - Femdom</title>
+<link>$doregex[makelist]</link>
+<regex>
+  <name>makelist</name>
+  <listrepeat><![CDATA[
+        <title>[makelist.param3][/COLOR]</title>
+        <link>$doregex[getsrcpink]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[div id.+<a href="(.+?)".+img src="(.+?)".+title="(.+?)">]]></expres>
+<page>http://www.xvideos.com/c/d:20min_more/q:1080P/Femdom-235/</page>
+<cookieJar></cookieJar>
+</regex>
+<regex>
+<name>getsrcpink</name>
+<expres><![CDATA[setVideoUrlHigh\('(.+?)'\)]]></expres>
+<page>http://www.xvideos.com[makelist.param1]</page>
+</regex>
+</item>
+
+
+<item>
+<title>Xvideos - Film</title>
+<link>$doregex[makelist]</link>
+<regex>
+  <name>makelist</name>
+  <listrepeat><![CDATA[
+        <title>[makelist.param3][/COLOR]</title>
+        <link>$doregex[getsrcpink]</link>
+        <thumbnail>[makelist.param2]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[div id.+<a href="(.+?)".+img src="(.+?)".+title="(.+?)">]]></expres>
+<page>http://www.xvideos.com/?k=film&sort=relevance&durf=20min_more&quality=1080P/</page>
+<cookieJar></cookieJar>
+</regex>
+<regex>
+<name>getsrcpink</name>
+<expres><![CDATA[setVideoUrlHigh\('(.+?)'\)]]></expres>
+<page>http://www.xvideos.com[makelist.param1]</page>
+</regex>
+</item>
+
+
+<item>
+<name>Zbporn: Latest</name>
+<link>$doregex[makelist]</link>
+<thumbnail></thumbnail>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param3]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import cache,client,workers
+    import re,urllib,xbmc,xbmcgui
+    def unescape(s):
+        return re.sub('&#(\d+);', '', s)    
+    class page:
+        def run(self, r):
+            threads = [] ; self.r = [] ; r = [(r.index(i)+1, i) for i in r]
+            for i in r: threads.append(workers.Thread(self.request, i))
+            [i.start() for i in threads] ; [i.join() for i in threads]
+            return ''.join([str(i[1]) for i in sorted(self.r, key=lambda x: x[0])])
+        def request(self, i):
+            self.r += [(i[0], client.request(i[1]))]       
+
+    url = 'https://zbporn.com/latest-updates/'
+    u = []
+    for i in range(1, 5): u += [url + str(i) + '/']
+    u = cache.get(page().run, 24, u)
+    r = re.findall('(?s)<div class="th">(?:[^=]*)="([^"]*)" title="([^"]*)(?:[^=]*)=(?:[^=]*)=(?:[^=]*)="([^"]*)', u)
+    r = [(i[0],unescape(i[1]),i[2]) for i in r]
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = '[makelist.param1]'
+    from resources.lib.modules import control
+    adultresolver = control.cdnImport('https://raw.githubusercontent.com/gigoplast/pinkhat/main/adultresolver.xml', 'adultresolver')
+    adultresolver = adultresolver.streamer()
+    url = adultresolver.resolve(url)
+    return url
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Zbporn: Most Popular</name>
+<link>$doregex[makelist]</link>
+<thumbnail></thumbnail>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param3]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import cache,client,workers
+    import re,urllib,xbmc,xbmcgui
+    def unescape(s):
+        return re.sub('&#(\d+);', '', s)    
+    class page:
+        def run(self, r):
+            threads = [] ; self.r = [] ; r = [(r.index(i)+1, i) for i in r]
+            for i in r: threads.append(workers.Thread(self.request, i))
+            [i.start() for i in threads] ; [i.join() for i in threads]
+            return ''.join([str(i[1]) for i in sorted(self.r, key=lambda x: x[0])])
+        def request(self, i):
+            self.r += [(i[0], client.request(i[1]))]       
+
+    url = 'https://zbporn.com/most-popular/'
+    u = []
+    for i in range(1, 5): u += [url + str(i) + '/']
+    u = cache.get(page().run, 24, u)
+    r = re.findall('(?s)<div class="th">(?:[^=]*)="([^"]*)" title="([^"]*)(?:[^=]*)=(?:[^=]*)=(?:[^=]*)="([^"]*)', u)
+    r = [(i[0],unescape(i[1]),i[2]) for i in r]
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = '[makelist.param1]'
+    from resources.lib.modules import control
+    adultresolver = control.cdnImport('https://raw.githubusercontent.com/gigoplast/pinkhat/main/adultresolver.xml', 'adultresolver')
+    adultresolver = adultresolver.streamer()
+    url = adultresolver.resolve(url)
+    return url
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Zbporn: closeup</name>
+<link>$doregex[makelist]</link>
+<thumbnail></thumbnail>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param3]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import cache,client,workers
+    import re,urllib,xbmc,xbmcgui
+    def unescape(s):
+        return re.sub('&#(\d+);', '', s)    
+    class page:
+        def run(self, r):
+            threads = [] ; self.r = [] ; r = [(r.index(i)+1, i) for i in r]
+            for i in r: threads.append(workers.Thread(self.request, i))
+            [i.start() for i in threads] ; [i.join() for i in threads]
+            return ''.join([str(i[1]) for i in sorted(self.r, key=lambda x: x[0])])
+        def request(self, i):
+            self.r += [(i[0], client.request(i[1]))]       
+
+    url = 'https://zbporn.com/categories/close-ups/longest/'
+    u = []
+    for i in range(1, 5): u += [url + str(i) + '/']
+    u = cache.get(page().run, 24, u)
+    r = re.findall('(?s)<div class="th">(?:[^=]*)="([^"]*)" title="([^"]*)(?:[^=]*)=(?:[^=]*)=(?:[^=]*)="([^"]*)', u)
+    r = [(i[0],unescape(i[1]),i[2]) for i in r]
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = '[makelist.param1]'
+    from resources.lib.modules import control
+    adultresolver = control.cdnImport('https://raw.githubusercontent.com/gigoplast/pinkhat/main/adultresolver.xml', 'adultresolver')
+    adultresolver = adultresolver.streamer()
+    url = adultresolver.resolve(url)
+    return url
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Zbporn: Femdom</name>
+<link>$doregex[makelist]</link>
+<thumbnail></thumbnail>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param3]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import cache,client,workers
+    import re,urllib,xbmc,xbmcgui
+    def unescape(s):
+        return re.sub('&#(\d+);', '', s)    
+    class page:
+        def run(self, r):
+            threads = [] ; self.r = [] ; r = [(r.index(i)+1, i) for i in r]
+            for i in r: threads.append(workers.Thread(self.request, i))
+            [i.start() for i in threads] ; [i.join() for i in threads]
+            return ''.join([str(i[1]) for i in sorted(self.r, key=lambda x: x[0])])
+        def request(self, i):
+            self.r += [(i[0], client.request(i[1]))]       
+
+    url = 'https://zbporn.com/categories/femdom/longest/'
+    u = []
+    for i in range(1, 5): u += [url + str(i) + '/']
+    u = cache.get(page().run, 24, u)
+    r = re.findall('(?s)<div class="th">(?:[^=]*)="([^"]*)" title="([^"]*)(?:[^=]*)=(?:[^=]*)=(?:[^=]*)="([^"]*)', u)
+    r = [(i[0],unescape(i[1]),i[2]) for i in r]
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = '[makelist.param1]'
+    from resources.lib.modules import control
+    adultresolver = control.cdnImport('https://raw.githubusercontent.com/gigoplast/pinkhat/main/adultresolver.xml', 'adultresolver')
+    adultresolver = adultresolver.streamer()
+    url = adultresolver.resolve(url)
+    return url
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Zbporn: Fingering</name>
+<link>$doregex[makelist]</link>
+<thumbnail></thumbnail>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param3]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import cache,client,workers
+    import re,urllib,xbmc,xbmcgui
+    def unescape(s):
+        return re.sub('&#(\d+);', '', s)    
+    class page:
+        def run(self, r):
+            threads = [] ; self.r = [] ; r = [(r.index(i)+1, i) for i in r]
+            for i in r: threads.append(workers.Thread(self.request, i))
+            [i.start() for i in threads] ; [i.join() for i in threads]
+            return ''.join([str(i[1]) for i in sorted(self.r, key=lambda x: x[0])])
+        def request(self, i):
+            self.r += [(i[0], client.request(i[1]))]       
+
+    url = 'https://zbporn.com/categories/fingering/longest/'
+    u = []
+    for i in range(1, 5): u += [url + str(i) + '/']
+    u = cache.get(page().run, 24, u)
+    r = re.findall('(?s)<div class="th">(?:[^=]*)="([^"]*)" title="([^"]*)(?:[^=]*)=(?:[^=]*)=(?:[^=]*)="([^"]*)', u)
+    r = [(i[0],unescape(i[1]),i[2]) for i in r]
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = '[makelist.param1]'
+    from resources.lib.modules import control
+    adultresolver = control.cdnImport('https://raw.githubusercontent.com/gigoplast/pinkhat/main/adultresolver.xml', 'adultresolver')
+    adultresolver = adultresolver.streamer()
+    url = adultresolver.resolve(url)
+    return url
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Zbporn: Vintage</name>
+<link>$doregex[makelist]</link>
+<thumbnail></thumbnail>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param3]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import cache,client,workers
+    import re,urllib,xbmc,xbmcgui
+    def unescape(s):
+        return re.sub('&#(\d+);', '', s)    
+    class page:
+        def run(self, r):
+            threads = [] ; self.r = [] ; r = [(r.index(i)+1, i) for i in r]
+            for i in r: threads.append(workers.Thread(self.request, i))
+            [i.start() for i in threads] ; [i.join() for i in threads]
+            return ''.join([str(i[1]) for i in sorted(self.r, key=lambda x: x[0])])
+        def request(self, i):
+            self.r += [(i[0], client.request(i[1]))]       
+
+    url = 'https://zbporn.com/categories/vintage/longest/'
+    u = []
+    for i in range(1, 5): u += [url + str(i) + '/']
+    u = cache.get(page().run, 24, u)
+    r = re.findall('(?s)<div class="th">(?:[^=]*)="([^"]*)" title="([^"]*)(?:[^=]*)=(?:[^=]*)=(?:[^=]*)="([^"]*)', u)
+    r = [(i[0],unescape(i[1]),i[2]) for i in r]
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = '[makelist.param1]'
+    from resources.lib.modules import control
+    adultresolver = control.cdnImport('https://raw.githubusercontent.com/gigoplast/pinkhat/main/adultresolver.xml', 'adultresolver')
+    adultresolver = adultresolver.streamer()
+    url = adultresolver.resolve(url)
+    return url
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Zbporn: Matures</name>
+<link>$doregex[makelist]</link>
+<thumbnail></thumbnail>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param3]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import cache,client,workers
+    import re,urllib,xbmc,xbmcgui
+    def unescape(s):
+        return re.sub('&#(\d+);', '', s)    
+    class page:
+        def run(self, r):
+            threads = [] ; self.r = [] ; r = [(r.index(i)+1, i) for i in r]
+            for i in r: threads.append(workers.Thread(self.request, i))
+            [i.start() for i in threads] ; [i.join() for i in threads]
+            return ''.join([str(i[1]) for i in sorted(self.r, key=lambda x: x[0])])
+        def request(self, i):
+            self.r += [(i[0], client.request(i[1]))]       
+
+    url = 'https://zbporn.com/categories/matures/longest/'
+    u = []
+    for i in range(1, 5): u += [url + str(i) + '/']
+    u = cache.get(page().run, 24, u)
+    r = re.findall('(?s)<div class="th">(?:[^=]*)="([^"]*)" title="([^"]*)(?:[^=]*)=(?:[^=]*)=(?:[^=]*)="([^"]*)', u)
+    r = [(i[0],unescape(i[1]),i[2]) for i in r]
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = '[makelist.param1]'
+    from resources.lib.modules import control
+    adultresolver = control.cdnImport('https://raw.githubusercontent.com/gigoplast/pinkhat/main/adultresolver.xml', 'adultresolver')
+    adultresolver = adultresolver.streamer()
+    url = adultresolver.resolve(url)
+    return url
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Zbporn: Lesbi</name>
+<link>$doregex[makelist]</link>
+<thumbnail></thumbnail>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param3]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import cache,client,workers
+    import re,urllib,xbmc,xbmcgui
+    def unescape(s):
+        return re.sub('&#(\d+);', '', s)    
+    class page:
+        def run(self, r):
+            threads = [] ; self.r = [] ; r = [(r.index(i)+1, i) for i in r]
+            for i in r: threads.append(workers.Thread(self.request, i))
+            [i.start() for i in threads] ; [i.join() for i in threads]
+            return ''.join([str(i[1]) for i in sorted(self.r, key=lambda x: x[0])])
+        def request(self, i):
+            self.r += [(i[0], client.request(i[1]))]       
+
+    url = 'https://zbporn.com/categories/lesbians/longest/'
+    u = []
+    for i in range(1, 5): u += [url + str(i) + '/']
+    u = cache.get(page().run, 24, u)
+    r = re.findall('(?s)<div class="th">(?:[^=]*)="([^"]*)" title="([^"]*)(?:[^=]*)=(?:[^=]*)=(?:[^=]*)="([^"]*)', u)
+    r = [(i[0],unescape(i[1]),i[2]) for i in r]
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = '[makelist.param1]'
+    from resources.lib.modules import control
+    adultresolver = control.cdnImport('https://raw.githubusercontent.com/gigoplast/pinkhat/main/adultresolver.xml', 'adultresolver')
+    adultresolver = adultresolver.streamer()
+    url = adultresolver.resolve(url)
+    return url
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Zbporn: Granny</name>
+<link>$doregex[makelist]</link>
+<thumbnail></thumbnail>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param3]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import cache,client,workers
+    import re,urllib,xbmc,xbmcgui
+    def unescape(s):
+        return re.sub('&#(\d+);', '', s)    
+    class page:
+        def run(self, r):
+            threads = [] ; self.r = [] ; r = [(r.index(i)+1, i) for i in r]
+            for i in r: threads.append(workers.Thread(self.request, i))
+            [i.start() for i in threads] ; [i.join() for i in threads]
+            return ''.join([str(i[1]) for i in sorted(self.r, key=lambda x: x[0])])
+        def request(self, i):
+            self.r += [(i[0], client.request(i[1]))]       
+
+    url = 'https://zbporn.com/categories/grannies/longest/'
+    u = []
+    for i in range(1, 5): u += [url + str(i) + '/']
+    u = cache.get(page().run, 24, u)
+    r = re.findall('(?s)<div class="th">(?:[^=]*)="([^"]*)" title="([^"]*)(?:[^=]*)=(?:[^=]*)=(?:[^=]*)="([^"]*)', u)
+    r = [(i[0],unescape(i[1]),i[2]) for i in r]
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = '[makelist.param1]'
+    from resources.lib.modules import control
+    adultresolver = control.cdnImport('https://raw.githubusercontent.com/gigoplast/pinkhat/main/adultresolver.xml', 'adultresolver')
+    adultresolver = adultresolver.streamer()
+    url = adultresolver.resolve(url)
+    return url
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Zbporn: Toys</name>
+<link>$doregex[makelist]</link>
+<thumbnail></thumbnail>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param3]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import cache,client,workers
+    import re,urllib,xbmc,xbmcgui
+    def unescape(s):
+        return re.sub('&#(\d+);', '', s)    
+    class page:
+        def run(self, r):
+            threads = [] ; self.r = [] ; r = [(r.index(i)+1, i) for i in r]
+            for i in r: threads.append(workers.Thread(self.request, i))
+            [i.start() for i in threads] ; [i.join() for i in threads]
+            return ''.join([str(i[1]) for i in sorted(self.r, key=lambda x: x[0])])
+        def request(self, i):
+            self.r += [(i[0], client.request(i[1]))]       
+
+    url = 'https://zbporn.com/categories/sex-toys/longest/'
+    u = []
+    for i in range(1, 5): u += [url + str(i) + '/']
+    u = cache.get(page().run, 24, u)
+    r = re.findall('(?s)<div class="th">(?:[^=]*)="([^"]*)" title="([^"]*)(?:[^=]*)=(?:[^=]*)=(?:[^=]*)="([^"]*)', u)
+    r = [(i[0],unescape(i[1]),i[2]) for i in r]
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = '[makelist.param1]'
+    from resources.lib.modules import control
+    adultresolver = control.cdnImport('https://raw.githubusercontent.com/gigoplast/pinkhat/main/adultresolver.xml', 'adultresolver')
+    adultresolver = adultresolver.streamer()
+    url = adultresolver.resolve(url)
+    return url
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+<item>
+<name>Zbporn: Pov</name>
+<link>$doregex[makelist]</link>
+<thumbnail></thumbnail>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param3]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import cache,client,workers
+    import re,urllib,xbmc,xbmcgui
+    def unescape(s):
+        return re.sub('&#(\d+);', '', s)    
+    class page:
+        def run(self, r):
+            threads = [] ; self.r = [] ; r = [(r.index(i)+1, i) for i in r]
+            for i in r: threads.append(workers.Thread(self.request, i))
+            [i.start() for i in threads] ; [i.join() for i in threads]
+            return ''.join([str(i[1]) for i in sorted(self.r, key=lambda x: x[0])])
+        def request(self, i):
+            self.r += [(i[0], client.request(i[1]))]       
+
+    url = 'https://zbporn.com/categories/pov/longest/'
+    u = []
+    for i in range(1, 5): u += [url + str(i) + '/']
+    u = cache.get(page().run, 24, u)
+    r = re.findall('(?s)<div class="th">(?:[^=]*)="([^"]*)" title="([^"]*)(?:[^=]*)=(?:[^=]*)=(?:[^=]*)="([^"]*)', u)
+    r = [(i[0],unescape(i[1]),i[2]) for i in r]
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = '[makelist.param1]'
+    from resources.lib.modules import control
+    adultresolver = control.cdnImport('https://raw.githubusercontent.com/gigoplast/pinkhat/main/adultresolver.xml', 'adultresolver')
+    adultresolver = adultresolver.streamer()
+    url = adultresolver.resolve(url)
+    return url
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Zbporn: Orgasm</name>
+<link>$doregex[makelist]</link>
+<thumbnail></thumbnail>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param3]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import cache,client,workers
+    import re,urllib,xbmc,xbmcgui
+    def unescape(s):
+        return re.sub('&#(\d+);', '', s)    
+    class page:
+        def run(self, r):
+            threads = [] ; self.r = [] ; r = [(r.index(i)+1, i) for i in r]
+            for i in r: threads.append(workers.Thread(self.request, i))
+            [i.start() for i in threads] ; [i.join() for i in threads]
+            return ''.join([str(i[1]) for i in sorted(self.r, key=lambda x: x[0])])
+        def request(self, i):
+            self.r += [(i[0], client.request(i[1]))]       
+
+    url = 'https://zbporn.com/categories/orgasm/longest/'
+    u = []
+    for i in range(1, 5): u += [url + str(i) + '/']
+    u = cache.get(page().run, 24, u)
+    r = re.findall('(?s)<div class="th">(?:[^=]*)="([^"]*)" title="([^"]*)(?:[^=]*)=(?:[^=]*)=(?:[^=]*)="([^"]*)', u)
+    r = [(i[0],unescape(i[1]),i[2]) for i in r]
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = '[makelist.param1]'
+    from resources.lib.modules import control
+    adultresolver = control.cdnImport('https://raw.githubusercontent.com/gigoplast/pinkhat/main/adultresolver.xml', 'adultresolver')
+    adultresolver = adultresolver.streamer()
+    url = adultresolver.resolve(url)
+    return url
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+<item>
+<name>Mango - Kink</name>
+<link>$doregex[makelist]</link>
+<thumbnail></thumbnail>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param1]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import cache,client,workers
+    import re
+    def unescape(s):
+        return re.sub('&#(\d+);', '', s)
+    u = client.request('https://mangoporn.net/adult/studios/kink-clips/#')
+    r = re.findall('(?s)<article id="post.*?src="([^"]*)" alt="([^"]*).*?href="([^"]*)', u)
+    r = [(i[0],unescape(i[1].replace('&amp;','&')),i[2]) for i in r]
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<listrepeat><![CDATA[
+        <title>[playurl.param1]</title>
+        <link>[playurl.param2]</link>
+        <thumbnail>[makelist.param1]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = client.request('[makelist.param3]')
+    r = re.findall('(?s)class="hosts-buttons(?:[^=]*)=".*?on([^"]*)" href="([^"]*)', url)
+    return r
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+<item>
+<name>Mango - Elegant</name>
+<link>$doregex[makelist]</link>
+<thumbnail></thumbnail>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param1]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import cache,client,workers
+    import re
+    def unescape(s):
+        return re.sub('&#(\d+);', '', s)
+    u = client.request('https://mangoporn.net/adult/studios/elegant-angel/#')
+    r = re.findall('(?s)<article id="post.*?src="([^"]*)" alt="([^"]*).*?href="([^"]*)', u)
+    r = [(i[0],unescape(i[1].replace('&amp;','&')),i[2]) for i in r]
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<listrepeat><![CDATA[
+        <title>[playurl.param1]</title>
+        <link>[playurl.param2]</link>
+        <thumbnail>[makelist.param1]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = client.request('[makelist.param3]')
+    r = re.findall('(?s)class="hosts-buttons(?:[^=]*)=".*?on([^"]*)" href="([^"]*)', url)
+    return r
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Mango - BlueBird</name>
+<link>$doregex[makelist]</link>
+<thumbnail></thumbnail>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param1]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import cache,client,workers
+    import re
+    def unescape(s):
+        return re.sub('&#(\d+);', '', s)
+    u = client.request('https://mangoporn.net/adult/studios/bluebird-films/#')
+    r = re.findall('(?s)<article id="post.*?src="([^"]*)" alt="([^"]*).*?href="([^"]*)', u)
+    r = [(i[0],unescape(i[1].replace('&amp;','&')),i[2]) for i in r]
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<listrepeat><![CDATA[
+        <title>[playurl.param1]</title>
+        <link>[playurl.param2]</link>
+        <thumbnail>[makelist.param1]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = client.request('[makelist.param3]')
+    r = re.findall('(?s)class="hosts-buttons(?:[^=]*)=".*?on([^"]*)" href="([^"]*)', url)
+    return r
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Mango - Cento</name>
+<link>$doregex[makelist]</link>
+<thumbnail></thumbnail>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param1]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import cache,client,workers
+    import re
+    def unescape(s):
+        return re.sub('&#(\d+);', '', s)
+    u = client.request('https://mangoporn.net/adult/studios/cento-x-cento/#')
+    r = re.findall('(?s)<article id="post.*?src="([^"]*)" alt="([^"]*).*?href="([^"]*)', u)
+    r = [(i[0],unescape(i[1].replace('&amp;','&')),i[2]) for i in r]
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<listrepeat><![CDATA[
+        <title>[playurl.param1]</title>
+        <link>[playurl.param2]</link>
+        <thumbnail>[makelist.param1]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = client.request('[makelist.param3]')
+    r = re.findall('(?s)class="hosts-buttons(?:[^=]*)=".*?on([^"]*)" href="([^"]*)', url)
+    return r
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Mango - GirlFreind</name>
+<link>$doregex[makelist]</link>
+<thumbnail></thumbnail>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param1]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import cache,client,workers
+    import re
+    def unescape(s):
+        return re.sub('&#(\d+);', '', s)
+    u = client.request('https://mangoporn.net/adult/studios/girlfriends-films/#')
+    r = re.findall('(?s)<article id="post.*?src="([^"]*)" alt="([^"]*).*?href="([^"]*)', u)
+    r = [(i[0],unescape(i[1].replace('&amp;','&')),i[2]) for i in r]
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<listrepeat><![CDATA[
+        <title>[playurl.param1]</title>
+        <link>[playurl.param2]</link>
+        <thumbnail>[makelist.param1]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = client.request('[makelist.param3]')
+    r = re.findall('(?s)class="hosts-buttons(?:[^=]*)=".*?on([^"]*)" href="([^"]*)', url)
+    return r
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Mango - Familly</name>
+<link>$doregex[makelist]</link>
+<thumbnail></thumbnail>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param1]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import cache,client,workers
+    import re
+    def unescape(s):
+        return re.sub('&#(\d+);', '', s)
+    u = client.request('https://mangoporn.net/adult/genre/family-roleplay/#')
+    r = re.findall('(?s)<article id="post.*?src="([^"]*)" alt="([^"]*).*?href="([^"]*)', u)
+    r = [(i[0],unescape(i[1].replace('&amp;','&')),i[2]) for i in r]
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<listrepeat><![CDATA[
+        <title>[playurl.param1]</title>
+        <link>[playurl.param2]</link>
+        <thumbnail>[makelist.param1]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = client.request('[makelist.param3]')
+    r = re.findall('(?s)class="hosts-buttons(?:[^=]*)=".*?on([^"]*)" href="([^"]*)', url)
+    return r
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Mango - Dorcel</name>
+<link>$doregex[makelist]</link>
+<thumbnail></thumbnail>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param1]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import cache,client,workers
+    import re
+    def unescape(s):
+        return re.sub('&#(\d+);', '', s)
+    u = client.request('https://mangoporn.net/adult/studios/marc-dorcel/#')
+    r = re.findall('(?s)<article id="post.*?src="([^"]*)" alt="([^"]*).*?href="([^"]*)', u)
+    r = [(i[0],unescape(i[1].replace('&amp;','&')),i[2]) for i in r]
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<listrepeat><![CDATA[
+        <title>[playurl.param1]</title>
+        <link>[playurl.param2]</link>
+        <thumbnail>[makelist.param1]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = client.request('[makelist.param3]')
+    r = re.findall('(?s)class="hosts-buttons(?:[^=]*)=".*?on([^"]*)" href="([^"]*)', url)
+    return r
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Mango - Glamore</name>
+<link>$doregex[makelist]</link>
+<thumbnail></thumbnail>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param1]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import cache,client,workers
+    import re
+    def unescape(s):
+        return re.sub('&#(\d+);', '', s)
+    u = client.request('https://mangoporn.net/adult/studios/ggg/#')
+    r = re.findall('(?s)<article id="post.*?src="([^"]*)" alt="([^"]*).*?href="([^"]*)', u)
+    r = [(i[0],unescape(i[1].replace('&amp;','&')),i[2]) for i in r]
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<listrepeat><![CDATA[
+        <title>[playurl.param1]</title>
+        <link>[playurl.param2]</link>
+        <thumbnail>[makelist.param1]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = client.request('[makelist.param3]')
+    r = re.findall('(?s)class="hosts-buttons(?:[^=]*)=".*?on([^"]*)" href="([^"]*)', url)
+    return r
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+<item>
+<name>Mango - Sensation</name>
+<link>$doregex[makelist]</link>
+<thumbnail></thumbnail>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param1]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import cache,client,workers
+    import re
+    def unescape(s):
+        return re.sub('&#(\d+);', '', s)
+    u = client.request('https://mangoporn.net/adult/studios/new-sensations/#')
+    r = re.findall('(?s)<article id="post.*?src="([^"]*)" alt="([^"]*).*?href="([^"]*)', u)
+    r = [(i[0],unescape(i[1].replace('&amp;','&')),i[2]) for i in r]
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<listrepeat><![CDATA[
+        <title>[playurl.param1]</title>
+        <link>[playurl.param2]</link>
+        <thumbnail>[makelist.param1]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = client.request('[makelist.param3]')
+    r = re.findall('(?s)class="hosts-buttons(?:[^=]*)=".*?on([^"]*)" href="([^"]*)', url)
+    return r
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Mango - Pros</name>
+<link>$doregex[makelist]</link>
+<thumbnail></thumbnail>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param1]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import cache,client,workers
+    import re
+    def unescape(s):
+        return re.sub('&#(\d+);', '', s)
+    u = client.request('https://mangoporn.net/adult/studios/porn-pros/#')
+    r = re.findall('(?s)<article id="post.*?src="([^"]*)" alt="([^"]*).*?href="([^"]*)', u)
+    r = [(i[0],unescape(i[1].replace('&amp;','&')),i[2]) for i in r]
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<listrepeat><![CDATA[
+        <title>[playurl.param1]</title>
+        <link>[playurl.param2]</link>
+        <thumbnail>[makelist.param1]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = client.request('[makelist.param3]')
+    r = re.findall('(?s)class="hosts-buttons(?:[^=]*)=".*?on([^"]*)" href="([^"]*)', url)
+    return r
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Mango - Mofos</name>
+<link>$doregex[makelist]</link>
+<thumbnail></thumbnail>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param1]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import cache,client,workers
+    import re
+    def unescape(s):
+        return re.sub('&#(\d+);', '', s)
+    u = client.request('https://mangoporn.net/adult/studios/mofos/#')
+    r = re.findall('(?s)<article id="post.*?src="([^"]*)" alt="([^"]*).*?href="([^"]*)', u)
+    r = [(i[0],unescape(i[1].replace('&amp;','&')),i[2]) for i in r]
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<listrepeat><![CDATA[
+        <title>[playurl.param1]</title>
+        <link>[playurl.param2]</link>
+        <thumbnail>[makelist.param1]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = client.request('[makelist.param3]')
+    r = re.findall('(?s)class="hosts-buttons(?:[^=]*)=".*?on([^"]*)" href="([^"]*)', url)
+    return r
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+<item>
+<name>Mango - 21Sextury</name>
+<link>$doregex[makelist]</link>
+<thumbnail></thumbnail>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param1]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import cache,client,workers
+    import re
+    def unescape(s):
+        return re.sub('&#(\d+);', '', s)
+    u = client.request('https://mangoporn.net/adult/studios/21-sextury-video/#')
+    r = re.findall('(?s)<article id="post.*?src="([^"]*)" alt="([^"]*).*?href="([^"]*)', u)
+    r = [(i[0],unescape(i[1].replace('&amp;','&')),i[2]) for i in r]
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<listrepeat><![CDATA[
+        <title>[playurl.param1]</title>
+        <link>[playurl.param2]</link>
+        <thumbnail>[makelist.param1]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = client.request('[makelist.param3]')
+    r = re.findall('(?s)class="hosts-buttons(?:[^=]*)=".*?on([^"]*)" href="([^"]*)', url)
+    return r
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+
+</xml>
