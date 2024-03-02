@@ -3300,7 +3300,7 @@ def GetLSProData(page_data,Cookie_Jar,m,url = ''):
 </item>
 
 <item>
-<name>Pornrewind: CloseUp</name>
+<name>Pornrewind: 18 Close Up</name>
 <link>$doregex[makelist]</link>
 <thumbnail></thumbnail>
 <regex>
@@ -3325,7 +3325,7 @@ def GetLSProData(page_data,Cookie_Jar,m,url = ''):
         def request(self, i):
             self.r += [(i[0], client.request(i[1]))]       
 
-    url = 'https://www.pornrewind.com/categories/18-close-up/'
+    url = 'https://www.pornrewind.com/categories/'
     u = []
     for i in range(1, 10): u += [url + str(i) + '/']
     u = page().run(u)
@@ -3353,7 +3353,7 @@ def GetLSProData(page_data,Cookie_Jar,m,url = ''):
 </item>
 
 <item>
-<name>Pornrewind: Milfs</name>
+<name>Pornrewind: MILF</name>
 <link>$doregex[makelist]</link>
 <thumbnail></thumbnail>
 <regex>
@@ -3378,7 +3378,7 @@ def GetLSProData(page_data,Cookie_Jar,m,url = ''):
         def request(self, i):
             self.r += [(i[0], client.request(i[1]))]       
 
-    url = 'https://www.pornrewind.com/categories/milf/'
+    url = 'https://www.pornrewind.com/categories/'
     u = []
     for i in range(1, 10): u += [url + str(i) + '/']
     u = page().run(u)
@@ -3431,7 +3431,7 @@ def GetLSProData(page_data,Cookie_Jar,m,url = ''):
         def request(self, i):
             self.r += [(i[0], client.request(i[1]))]       
 
-    url = 'https://www.pornrewind.com/categories/shaved/'
+    url = 'https://www.pornrewind.com/categories/'
     u = []
     for i in range(1, 10): u += [url + str(i) + '/']
     u = page().run(u)
