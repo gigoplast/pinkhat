@@ -3300,6 +3300,59 @@ def GetLSProData(page_data,Cookie_Jar,m,url = ''):
 </item>
 
 <item>
+<name>Pornrewind: Latest</name>
+<link>$doregex[makelist]</link>
+<thumbnail></thumbnail>
+<regex>
+<name>makelist</name>
+<listrepeat><![CDATA[
+        <title>[makelist.param2]</title>
+        <link>$doregex[playurl]</link>
+        <thumbnail>[makelist.param3]</thumbnail>
+]]></listrepeat>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client,workers
+    import re,xbmc,xbmcgui
+    def unescape(s):
+        return re.sub('&#(\d+);', '', s)    
+    class page:
+        def run(self, r):
+            threads = [] ; self.r = [] ; r = [(r.index(i)+1, i) for i in r]
+            for i in r: threads.append(workers.Thread(self.request, i))
+            [i.start() for i in threads] ; [i.join() for i in threads]
+            return ''.join([str(i[1]) for i in sorted(self.r, key=lambda x: x[0])])
+        def request(self, i):
+            self.r += [(i[0], client.request(i[1]))]       
+
+    url = 'https://www.pornrewind.com/videos/?sort_by=post_date'
+    u = []
+    for i in range(1, 10): u += [url + str(i) + '/']
+    u = page().run(u)
+    r = re.findall('(?s)data-item-id="(?:[^=]*)=(?:[^=]*)="([^"]*)(?:[^=]*)="([^"]*)(?:[^=]*)=(?:[^=]*)=(?:[^=]*)="([^"]*)', u)
+    r = [(i[0],unescape(i[1]),i[2]) for i in r]
+    return r
+]]></expres>
+<page></page>
+</regex>
+<regex>
+<name>playurl</name>
+<expres><![CDATA[#$pyFunction
+def GetLSProData(page_data,Cookie_Jar,m,url = ''):
+    from resources.lib.modules import client
+    import re
+    url = '[makelist.param1]'
+    from resources.lib.modules import control
+    adultresolver = control.cdnImport('https://raw.githubusercontent.com/gigoplast/pinkhat/adultresolver.xml', 'adultresolver')
+    adultresolver = adultresolver.streamer()
+    url = adultresolver.resolve(url)
+    return url
+]]></expres>
+<page></page>
+</regex>
+</item>
+
+<item>
 <name>Pornrewind: 18 Close Up</name>
 <link>$doregex[makelist]</link>
 <thumbnail></thumbnail>
@@ -3325,7 +3378,7 @@ def GetLSProData(page_data,Cookie_Jar,m,url = ''):
         def request(self, i):
             self.r += [(i[0], client.request(i[1]))]       
 
-    url = 'https://www.pornrewind.com/categories/'
+    url = 'https://www.pornrewind.com/categories/18-close-up/'
     u = []
     for i in range(1, 10): u += [url + str(i) + '/']
     u = page().run(u)
@@ -3378,7 +3431,7 @@ def GetLSProData(page_data,Cookie_Jar,m,url = ''):
         def request(self, i):
             self.r += [(i[0], client.request(i[1]))]       
 
-    url = 'https://www.pornrewind.com/categories/'
+    url = 'https://www.pornrewind.com/categories/milf/'
     u = []
     for i in range(1, 10): u += [url + str(i) + '/']
     u = page().run(u)
@@ -3431,7 +3484,7 @@ def GetLSProData(page_data,Cookie_Jar,m,url = ''):
         def request(self, i):
             self.r += [(i[0], client.request(i[1]))]       
 
-    url = 'https://www.pornrewind.com/categories/'
+    url = 'https://www.pornrewind.com/categories/shaved/'
     u = []
     for i in range(1, 10): u += [url + str(i) + '/']
     u = page().run(u)
